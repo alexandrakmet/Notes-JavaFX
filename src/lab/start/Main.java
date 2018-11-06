@@ -15,10 +15,10 @@ public class Main extends Application {
         primaryStage.setTitle("Notes");
         primaryStage.setMinHeight(500);
         primaryStage.setMinWidth(600);
-        primaryStage.setScene(new Scene(root, 700, 550));
+        primaryStage.setScene(new Scene(root, 850, 500));
         primaryStage.show();
 
-        testData();
+        //testData();
     }
 
 

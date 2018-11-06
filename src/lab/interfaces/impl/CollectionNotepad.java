@@ -43,14 +43,14 @@ public class CollectionNotepad implements Notepad {
         System.out.println();
         for (Note note : noteList) {
             number++;
-            System.out.println(number + ". " + note.getName() + ":  " + note.getText());
+            System.out.println(number + ". " + note.getName() + ":  " + note.getText()+"  "+note.getTime());
         }
     }
 
     public void fillTestData() {
-        noteList.add(new Note("first", "fffffffffffffff"));
-        noteList.add(new Note("second", "ssssssssssssss"));
-        noteList.add(new Note("third", "ysu,tdc.ij"));
+        noteList.add(new Note("43first", "fffffffffffffff"));
+        noteList.add(new Note("11second", "ssssssssssssss"));
+        noteList.add(new Note("78third", "ysu,tdc.ij"));
         noteList.add(new Note("15", "aertyui"));
         noteList.add(new Note("16", "rxdtufguj"));
         noteList.add(new Note("78", "fyyyyyyyyf"));

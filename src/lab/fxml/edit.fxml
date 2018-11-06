@@ -9,8 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="520.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lab.controllers.EditDialogController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="520.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lab.controllers.EditDialogController">
    <left>
       <VBox prefHeight="151.0" prefWidth="125.0" BorderPane.alignment="CENTER">
          <children>
@@ -38,7 +37,7 @@
    <center>
       <VBox prefHeight="170.0" prefWidth="390.0" BorderPane.alignment="CENTER">
          <children>
-            <TextField fx:id="txtAdd">
+            <TextField fx:id="txtName">
                <VBox.margin>
                   <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
                </VBox.margin>
@@ -62,12 +61,12 @@
    <bottom>
       <HBox prefHeight="30.0" prefWidth="480.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="editOk" mnemonicParsing="false" prefHeight="44.0" prefWidth="89.0" text="ОК">
+            <Button fx:id="editOk" defaultButton="true" mnemonicParsing="false" onAction="#actionSave" prefHeight="44.0" prefWidth="89.0" text="ОК">
                <HBox.margin>
                   <Insets bottom="15.0" left="75.0" right="75.0" top="15.0" />
                </HBox.margin>
             </Button>
-            <Button fx:id="editCancel" mnemonicParsing="false" prefHeight="31.0" prefWidth="85.0" text="Отмена">
+            <Button fx:id="editCancel" cancelButton="true" mnemonicParsing="false" prefHeight="31.0" prefWidth="85.0" text="Отмена">
                <HBox.margin>
                   <Insets bottom="15.0" left="75.0" right="75.0" top="15.0" />
                </HBox.margin>
