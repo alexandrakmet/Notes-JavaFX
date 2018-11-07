@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import lab.controllers.Controller;
 import lab.interfaces.impl.CollectionNotepad;
@@ -23,6 +24,7 @@ public class Main extends Application {
         mainController.setMainStage(primaryStage);
 
         primaryStage.setTitle("Notes");
+        primaryStage.getIcons().add(new Image("file:resources/if_notes_edit_103663.png"));
         primaryStage.setMinHeight(500);
         primaryStage.setMinWidth(600);
         primaryStage.setScene(new Scene(fxmlMain, 850, 500));

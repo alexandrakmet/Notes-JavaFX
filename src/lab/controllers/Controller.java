@@ -8,16 +8,17 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lab.interfaces.impl.CollectionNotepad;
+import lab.objects.Lang;
 import lab.objects.Note;
 import javafx.scene.control.cell.PropertyValueFactory;
+import lab.utils.DialogManager;
+import lab.utils.GroupsManager;
 import org.controlsfx.control.textfield.CustomTextField;
 import org.controlsfx.control.textfield.TextFields;
 
@@ -27,7 +28,6 @@ import java.lang.reflect.Method;
 
 public class Controller {
     private CollectionNotepad notepadImpl = new CollectionNotepad();
-    private CollectionNotepad notepadImpl2 = new CollectionNotepad();
 
     private Stage mainStage;
 
@@ -37,6 +37,8 @@ public class Controller {
     private Button btnChange;
     @FXML
     private Button btnDelete;
+    @FXML
+    private Button btnArchive;
     @FXML
     private CustomTextField txtSearch;
     @FXML
@@ -49,7 +51,8 @@ public class Controller {
     private TableColumn<Note, String> columnDate;
     @FXML
     private TableColumn<Note, String> columnText;
-
+    @FXML
+    private ComboBox comboGroups;
     @FXML
     private Label labelCount;
 
@@ -58,7 +61,7 @@ public class Controller {
     private FXMLLoader fxmlLoader = new FXMLLoader();
     private EditDialogController editDialogController;
     private Stage editDialogStage;
-    ObservableList<Note> backupList;
+    // ObservableList<Note> backupList;
 
 
     public void setMainStage(Stage mainStage) {
@@ -75,19 +78,43 @@ public class Controller {
         initListeners();
 
         fillData();
-        table.setItems(notepadImpl.getNoteList());
 
         initLoader();
 
     }
 
     private void fillData() {
-        notepadImpl.fillTestData();
-        backupList = FXCollections.observableArrayList();
-        backupList.addAll(notepadImpl.getNoteList());
+        fillTable();
+        fillLangComboBox();
     }
 
-    private void setupClearButtonField(CustomTextField customTextField){
+    private void fillTable() {
+        notepadImpl.fillTestData();
+        table.setItems(notepadImpl.getNoteList());
+    }
+
+    public void fillLangComboBox() {
+        Lang langGen = new Lang(0, "Общие");
+        Lang langToDo = new Lang(1, "ToDo");
+        Lang langWork = new Lang(2, "Работа");
+        Lang langPers = new Lang(3, "Личное");
+        Lang langArchive = new Lang(4, "Архив");
+
+
+        comboGroups.getItems().add(langGen);
+        comboGroups.getItems().add(langToDo);
+        comboGroups.getItems().add(langWork);
+        comboGroups.getItems().add(langPers);
+        comboGroups.getItems().add(langArchive);
+
+        if (GroupsManager.getCurrentLangs() == null) {// по-умолчанию показывать выбранный русский язык (можно текущие настройки языка сохранять в файл)
+            comboGroups.getSelectionModel().select(0);
+        } else {
+            comboGroups.getSelectionModel().select(GroupsManager.getCurrentLangs().getIndex());
+        }
+    }
+
+    private void setupClearButtonField(CustomTextField customTextField) {
         try {
             Method m = TextFields.class.getDeclaredMethod("setupClearButtonField", TextField.class, ObjectProperty.class);
             m.setAccessible(true);
@@ -102,18 +129,35 @@ public class Controller {
             fxmlLoader.setLocation(getClass().getResource("../fxml/edit.fxml"));
             fxmlEdit = fxmlLoader.load();
             editDialogController = fxmlLoader.getController();
-        }  catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void initListeners(){
+    private void initListeners() {
         notepadImpl.getNoteList().addListener((ListChangeListener<Note>) c -> updateCountLabel());
 
         table.setOnMouseClicked(event -> {
-            if(event.getClickCount()==2){
-                editDialogController.setNote((Note)table.getSelectionModel().getSelectedItem());
+            if (event.getClickCount() == 2) {
+                editDialogController.setNote((Note) table.getSelectionModel().getSelectedItem());
                 showDialog();
+            }
+        });
+
+        comboGroups.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Lang selectedLang = (Lang) comboGroups.getSelectionModel().getSelectedItem();
+                GroupsManager.setCurrentLangs(selectedLang);
+                notepadImpl.search(GroupsManager.getCurrentLangs().getName());
+                if (selectedLang.getName().equals("Архив")) {
+                    btnAdd.setVisible(false);
+                    btnArchive.setVisible(false);
+                } else {
+                    btnAdd.setVisible(true);
+                    btnArchive.setVisible(true);
+                }
+
             }
         });
     }
@@ -129,7 +173,7 @@ public class Controller {
         if (!(source instanceof Button)) {
             return;
         }
-
+        Note selectedNote = (Note) table.getSelectionModel().getSelectedItem();
         Button clickedButton = (Button) source;
 
         switch (clickedButton.getId()) {
@@ -141,20 +185,39 @@ public class Controller {
                 table.setItems(notepadImpl2.getNoteList());*/
                 break;
             case "btnChange":
+                if (!noteIsSelected(selectedNote)) {
+                    return;
+                }
                 editDialogController.setNote((Note) table.getSelectionModel().getSelectedItem());
                 showDialog();
                 break;
+            case "btnArchive":
+                if (!noteIsSelected(selectedNote)) {
+                    return;
+                }
+                notepadImpl.remove((Note) table.getSelectionModel().getSelectedItem());
+                break;
             case "btnDelete":
+                if (!noteIsSelected(selectedNote)) {
+                    return;
+                }
                 notepadImpl.delete((Note) table.getSelectionModel().getSelectedItem());
                 break;
         }
 
     }
 
-    private void showDialog(){
-//addpassw.setWebsite(selectedWebsite);
+    private boolean noteIsSelected(Note selectedNote) {
+        if (selectedNote == null) {
+            DialogManager.showInfDialog("Ошибка", "Выберите запись");
+            return false;
+        }
+        return true;
+    }
 
-        if (editDialogStage==null) {
+    private void showDialog() {
+//addpassw.setWebsite(selectedWebsite);
+        if (editDialogStage == null) {
             editDialogStage = new Stage();
             editDialogStage.setTitle("Редактирование записи");
             editDialogStage.setMinWidth(520);
@@ -163,20 +226,23 @@ public class Controller {
             editDialogStage.setScene(new Scene(fxmlEdit));
             editDialogStage.initModality(Modality.WINDOW_MODAL);
             editDialogStage.initOwner(mainStage);
+            editDialogController.fillLangComboBox();
+
         }
 
-      editDialogStage.showAndWait(); // для ожидания закрытия окна
+        editDialogStage.showAndWait(); // для ожидания закрытия окна
 
         //editDialogStage.show();
     }
 
-    public void actionSearch(ActionEvent actionEvent){
+    public void actionSearch(ActionEvent actionEvent) {
+        System.out.println(notepadImpl.getBackupList().toString());
         notepadImpl.getNoteList().clear();
 
-        for (Note note: backupList) {
-            if(note.getName().toLowerCase().contains(txtSearch.getText().toLowerCase())||
-                    note.getText().toLowerCase().contains(txtSearch.getText().toLowerCase())||
-                    note.getTime().toLowerCase().contains(txtSearch.getText().toLowerCase())){
+        for (Note note : notepadImpl.getBackupList()) {
+            if (note.getName().toLowerCase().contains(txtSearch.getText().toLowerCase()) ||
+                    note.getText().toLowerCase().contains(txtSearch.getText().toLowerCase()) ||
+                    note.getTime().toLowerCase().contains(txtSearch.getText().toLowerCase())) {
                 notepadImpl.getNoteList().add(note);
             }
         }

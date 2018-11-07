@@ -16,9 +16,10 @@ public class Note {
 
     public Note(){}
 
-    public Note(String name, String text) {
+    public Note(String name, String group, String text) {
         this.name = new SimpleStringProperty(name);
         this.text = new SimpleStringProperty(text);
+        this.group = new SimpleStringProperty(group);
         /**DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
          String formatDateTime = now.format(formatter);*/
