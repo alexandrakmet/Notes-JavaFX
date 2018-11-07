@@ -86,11 +86,9 @@ public class Note {
 
     @Override
     public String toString() {
-        return "Note{" +
-                "name='" + name + '\'' +
-                ", group='" + group + '\'' +
-                ", text='" + text + '\'' +
-                ", time='" + time + '\'' +
-                '}';
+        return "Название: " + getName() +
+                ",  группа: " + getGroup() +
+                ",  дата создания: " + getTime() +
+                ",  содержание: " + getText();
     }
 }

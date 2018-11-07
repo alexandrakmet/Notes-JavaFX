@@ -1,5 +1,6 @@
 package lab.controllers;
 
+import java.lang.Object.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -11,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lab.interfaces.impl.CollectionNotepad;
@@ -19,9 +21,11 @@ import lab.objects.Note;
 import javafx.scene.control.cell.PropertyValueFactory;
 import lab.utils.DialogManager;
 import lab.utils.GroupsManager;
+import org.apache.commons.io.FileUtils;
 import org.controlsfx.control.textfield.CustomTextField;
 import org.controlsfx.control.textfield.TextFields;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
@@ -39,6 +43,8 @@ public class Controller {
     private Button btnDelete;
     @FXML
     private Button btnArchive;
+    @FXML
+    private Button saveNote;
     @FXML
     private CustomTextField txtSearch;
     @FXML
@@ -160,6 +166,43 @@ public class Controller {
 
             }
         });
+
+       /* MenuItem cmItem2 = new MenuItem("Save Image");
+        cmItem2.setOnAction(new EventHandler<ActionEvent>() {
+                                public void handle(ActionEvent e) {
+                                    FileChooser fileChooser = new FileChooser();
+                                    fileChooser.setTitle("Save Image");
+                                    System.out.println(pic.getId());
+                                    File file = fileChooser.showSaveDialog(stage);
+                                    if (file != null) {
+                                        try {
+                                            ImageIO.write(SwingFXUtils.fromFXImage(pic.getImage(),
+                                                    null), "png", file);
+                                        } catch (IOException ex) {
+                                            System.out.println(ex.getMessage());
+                                        }
+                                    }
+                                }
+                            }
+        );*/
+       saveNote.setOnAction(new EventHandler<ActionEvent>() {
+           @Override
+           public void handle(ActionEvent event) {
+               FileChooser fileChooser = new FileChooser();
+               fileChooser.setTitle("Save Note");
+               File file = fileChooser.showSaveDialog(new Stage());
+               if (file != null) {
+                   try {
+                       FileUtils.writeLines(file,notepadImpl.getNoteList());
+                   } catch (IOException e) {
+                       e.printStackTrace();
+                   }
+               }
+
+           }
+       });
+
+
     }
 
     private void updateCountLabel() {
