@@ -16,6 +16,13 @@ public class Note {
 
     public Note(){}
 
+    public Note(String name, String group,String time, String text) {
+        this.name = new SimpleStringProperty(name);
+        this.text = new SimpleStringProperty(text);
+        this.group = new SimpleStringProperty(group);
+        this.time = new SimpleStringProperty(time);
+    }
+
     public Note(String name, String group, String text) {
         this.name = new SimpleStringProperty(name);
         this.text = new SimpleStringProperty(text);
@@ -86,9 +93,9 @@ public class Note {
 
     @Override
     public String toString() {
-        return "Название: " + getName() +
-                ",  группа: " + getGroup() +
-                ",  дата создания: " + getTime() +
-                ",  содержание: " + getText();
+        return "Название: '" + getName() +
+                "',  группа: '" + getGroup() +
+                "',  дата создания: '" + getTime() +
+                "',  содержание: '" + getText()+"'";
     }
 }

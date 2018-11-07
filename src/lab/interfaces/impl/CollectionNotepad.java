@@ -4,6 +4,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import lab.interfaces.Notepad;
 import lab.objects.Note;
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Alexandra on 05.11.2018.
@@ -80,12 +86,25 @@ public class CollectionNotepad implements Notepad {
     }
 
     public void fillTestData() {
-        this.add(new Note("43first", "Работа", "fffffffffffffff"));
+       /* this.add(new Note("43first", "Работа", "fffffffffffffff"));
         this.add(new Note("11second", "Личное", "ssssssssssssss"));
         this.add(new Note("78third", "Работа", "ysu,tdc.ij"));
         this.add(new Note("15", "Личное", "aertyui"));
         this.add(new Note("16", "Личное", "rxdtufguj"));
-        this.add(new Note("78", "Личное", "fyyyyyyyyf"));
+        this.add(new Note("78", "Личное", "fyyyyyyyyf"));*/
+
+        List<String> temp = null;
+        File file = new File("C:\\Users\\Alexandra\\IdeaProjects\\labWork2\\resources\\заметочки.txt");
+        try {
+            temp = FileUtils.readLines(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        for (String note:temp) {
+            String temps[] = note.split("'");
+            add(new Note(temps[1], temps[3], temps[5], temps[7] ));
+        }
     }
 
     public ObservableList<Note> getBackupList() {

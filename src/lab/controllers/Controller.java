@@ -167,24 +167,6 @@ public class Controller {
             }
         });
 
-       /* MenuItem cmItem2 = new MenuItem("Save Image");
-        cmItem2.setOnAction(new EventHandler<ActionEvent>() {
-                                public void handle(ActionEvent e) {
-                                    FileChooser fileChooser = new FileChooser();
-                                    fileChooser.setTitle("Save Image");
-                                    System.out.println(pic.getId());
-                                    File file = fileChooser.showSaveDialog(stage);
-                                    if (file != null) {
-                                        try {
-                                            ImageIO.write(SwingFXUtils.fromFXImage(pic.getImage(),
-                                                    null), "png", file);
-                                        } catch (IOException ex) {
-                                            System.out.println(ex.getMessage());
-                                        }
-                                    }
-                                }
-                            }
-        );*/
        saveNote.setOnAction(new EventHandler<ActionEvent>() {
            @Override
            public void handle(ActionEvent event) {
