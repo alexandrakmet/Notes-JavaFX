@@ -1,3 +1,3 @@
 # Notes-JavaFX
 
-Simple desktop notes with material design.
+Desktop notes with material design.
