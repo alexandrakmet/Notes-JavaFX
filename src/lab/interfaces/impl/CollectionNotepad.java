@@ -86,15 +86,9 @@ public class CollectionNotepad implements Notepad {
     }
 
     public void fillTestData() {
-       /* this.add(new Note("43first", "Работа", "fffffffffffffff"));
-        this.add(new Note("11second", "Личное", "ssssssssssssss"));
-        this.add(new Note("78third", "Работа", "ysu,tdc.ij"));
-        this.add(new Note("15", "Личное", "aertyui"));
-        this.add(new Note("16", "Личное", "rxdtufguj"));
-        this.add(new Note("78", "Личное", "fyyyyyyyyf"));*/
 
         List<String> temp = null;
-        File file = new File("C:\\Users\\Alexandra\\IdeaProjects\\labWork2\\resources\\заметочки.txt");
+        File file = new File("resources/notes.txt");
         try {
             temp = FileUtils.readLines(file);
         } catch (IOException e) {
